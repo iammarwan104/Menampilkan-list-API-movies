@@ -11,22 +11,29 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 export default function AkanDihapus() {
-    const [status, setStatus] = useState(false)
+    const [status, setStatus] = useState(null)
     const [data, setData] = useState([]);
+
+
     function getData() {
         const inputan = document.getElementById('inputan');
+        setStatus(false)
         fetch(`http://www.omdbapi.com/?s=${inputan.value}&apikey=aebedaef`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Ada yang salah pada link')
                 }
+                // console.log(response);
                 return response.json()
             })
             .then(datas => {
                 if (datas.Response === 'False') {
                     throw new Error(datas.Error)
                 };
+                // Shimmer()
+                // if (datas.Response === 'True') {
                 setStatus(true)
+                // }
                 return (setData(datas.Search))
             })
             .catch(error => {
@@ -61,6 +68,7 @@ export default function AkanDihapus() {
     function Shimmer() {
         return (
             <div className="flex items-center justify-center gap-4">
+                <ShimmerPostItem card title cta imageWidth={200} />
                 <ShimmerPostItem card title cta imageWidth={200} />
                 <ShimmerPostItem card title cta imageWidth={200} />
                 <ShimmerPostItem card title cta imageWidth={200} />
@@ -138,6 +146,17 @@ export default function AkanDihapus() {
         }
     }
 
+    function kopi() {
+        console.log(data);
+        console.log(listFilm);
+        console.log(status);
+        if (status === false && listFilm.length !== 0) {
+            return Shimmer()
+        }
+
+        return listFilm
+    }
+
 
     return (
         <div className='absolute w-[90vw] -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2 mt-4 mx-auto'>
@@ -167,8 +186,9 @@ export default function AkanDihapus() {
                 className="w-full  right-0 bottom-0 my-8">
                 {/* show result looping data employees */}
                 {
-                    status ?
-                        listFilm : Shimmer()
+                    kopi()
+                    // status ?
+                    //     listFilm : Shimmer()
                 }
 
             </Swiper>
