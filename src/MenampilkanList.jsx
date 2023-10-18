@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import React from "react";
+import { ShimmerPostItem } from "react-shimmer-effects";
+
 // Import style swiper elements
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 export default function AkanDihapus() {
+    const [status, setStatus] = useState(false)
     const [data, setData] = useState([]);
     function getData() {
         const inputan = document.getElementById('inputan');
@@ -22,16 +26,18 @@ export default function AkanDihapus() {
                 if (datas.Response === 'False') {
                     throw new Error(datas.Error)
                 };
-                return setData(datas.Search)
+                setStatus(true)
+                return (setData(datas.Search))
             })
             .catch(error => {
                 alert(error);
             })
     }
+    // console.log(status);
     let listFilm = data.map(movie =>
         <SwiperSlide key={movie.imdbID}>
             <img src={movie.Poster} alt={movie.Title} />
-            <h3 className='text-black font-semibold text-xl my-2'>{movie.Title}</h3>
+            <h3 className='text-white font-semibold text-xl my-2'>{movie.Title}</h3>
             <button onClick={() => showModalDetile(movie.imdbID)} >Detile</button>
         </SwiperSlide>
     )
@@ -50,6 +56,16 @@ export default function AkanDihapus() {
 
     function closeModal() {
         setShow(false)
+    }
+
+    function Shimmer() {
+        return (
+            <div className="flex items-center justify-center gap-4">
+                <ShimmerPostItem card title cta imageWidth={200} />
+                <ShimmerPostItem card title cta imageWidth={200} />
+                <ShimmerPostItem card title cta imageWidth={200} />
+            </div>
+        )
     }
 
     function showModal(kopi) {
@@ -123,14 +139,10 @@ export default function AkanDihapus() {
     }
 
 
-
-
-
-
     return (
         <div className='absolute w-[90vw] -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2 mt-4 mx-auto'>
             <div className='w-fit mx-auto flex gap-1 items-center'>
-                <input type="text" id='inputan' className=' rounded-lg text-xl p-[.35rem] border bg-white text-black border-2 border-black' />
+                <input type="text" id='inputan' className=' rounded-lg text-xl p-[.35rem] bg-white text-black border-2 border-black' />
                 <button className='rounded-1 border' onClick={getData}>Get Data</button>
             </div>
             <Swiper
@@ -154,7 +166,11 @@ export default function AkanDihapus() {
                 modules={[Navigation]}
                 className="w-full  right-0 bottom-0 my-8">
                 {/* show result looping data employees */}
-                {listFilm}
+                {
+                    status ?
+                        listFilm : Shimmer()
+                }
+
             </Swiper>
             {showModal(detileMovie)}
         </div>
