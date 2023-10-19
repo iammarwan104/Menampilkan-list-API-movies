@@ -11,8 +11,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 export default function AkanDihapus() {
-    const [status, setStatus] = useState(false)
     const [data, setData] = useState([]);
+    const [status, setStatus] = useState(false)
 
 
     function getData() {
@@ -147,11 +147,11 @@ export default function AkanDihapus() {
     }
 
     function kopi() {
-        status ? console.log('ok') : console.log('not ok')
-        console.log(data);
-        console.log(listFilm);
-        console.log(status);
+        if (status) {
+            return Shimmer();
+        }
 
+        return listFilm;
     }
 
 
@@ -181,12 +181,7 @@ export default function AkanDihapus() {
                 }}
                 modules={[Navigation]}
                 className="w-full  right-0 bottom-0 my-8">
-                {/* show result looping data employees */}
-                {
-                    kopi()
-                    // status ?
-                    //     listFilm : Shimmer()
-                }
+                {kopi()}
 
             </Swiper>
             {showModal(detileMovie)}
