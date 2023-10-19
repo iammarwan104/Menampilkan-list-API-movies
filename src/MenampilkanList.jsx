@@ -11,13 +11,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 export default function AkanDihapus() {
-    const [status, setStatus] = useState(null)
+    const [status, setStatus] = useState(false)
     const [data, setData] = useState([]);
 
 
     function getData() {
         const inputan = document.getElementById('inputan');
-        setStatus(false)
+        setStatus(true)
         fetch(`http://www.omdbapi.com/?s=${inputan.value}&apikey=aebedaef`)
             .then(response => {
                 if (!response.ok) {
@@ -32,7 +32,7 @@ export default function AkanDihapus() {
                 };
                 // Shimmer()
                 // if (datas.Response === 'True') {
-                setStatus(true)
+                setStatus(false)
                 // }
                 return (setData(datas.Search))
             })
@@ -147,14 +147,11 @@ export default function AkanDihapus() {
     }
 
     function kopi() {
+        status ? console.log('ok') : console.log('not ok')
         console.log(data);
         console.log(listFilm);
         console.log(status);
-        if (status === false && listFilm.length !== 0) {
-            return Shimmer()
-        }
 
-        return listFilm
     }
 
 
