@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import React from "react";
 import { ShimmerPostItem } from "react-shimmer-effects";
 
-// Import style swiper elements
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -23,24 +22,19 @@ export default function AkanDihapus() {
                 if (!response.ok) {
                     throw new Error('Ada yang salah pada link')
                 }
-                // console.log(response);
                 return response.json()
             })
             .then(datas => {
                 if (datas.Response === 'False') {
                     throw new Error(datas.Error)
                 };
-                // Shimmer()
-                // if (datas.Response === 'True') {
                 setStatus(false)
-                // }
                 return (setData(datas.Search))
             })
             .catch(error => {
                 alert(error);
             })
     }
-    // console.log(status);
     let listFilm = data.map(movie =>
         <SwiperSlide key={movie.imdbID}>
             <img src={movie.Poster} alt={movie.Title} />
@@ -67,11 +61,12 @@ export default function AkanDihapus() {
 
     function Shimmer() {
         return (
-            <div className="flex items-center justify-center gap-4">
-                <ShimmerPostItem card title cta imageWidth={200} />
-                <ShimmerPostItem card title cta imageWidth={200} />
-                <ShimmerPostItem card title cta imageWidth={200} />
-                <ShimmerPostItem card title cta imageWidth={200} />
+            <div className="flex gap-[40px] w-[90vw] mx-auto">
+                {data.map(movie =>
+                    <SwiperSlide key={movie.imdbID}>
+                        <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                    </SwiperSlide>
+                )}
             </div>
         )
     }
