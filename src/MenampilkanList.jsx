@@ -61,12 +61,19 @@ export default function AkanDihapus() {
 
     function Shimmer() {
         return (
-            <div className="flex gap-[40px] w-[90vw] mx-auto">
-                {data.map(movie =>
-                    <SwiperSlide key={movie.imdbID}>
-                        <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
-                    </SwiperSlide>
-                )}
+            <div>
+                <SwiperSlide>
+                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                </SwiperSlide>
             </div>
         )
     }
