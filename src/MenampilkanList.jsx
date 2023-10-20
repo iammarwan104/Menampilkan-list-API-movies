@@ -25,6 +25,7 @@ export default function AkanDihapus() {
                 return response.json()
             })
             .then(datas => {
+                console.log(datas);
                 if (datas.Response === 'False') {
                     throw new Error(datas.Error)
                 };
@@ -32,7 +33,14 @@ export default function AkanDihapus() {
                 return (setData(datas.Search))
             })
             .catch(error => {
-                alert(error);
+                console.log(error.name);
+                if (error.name === 'Error') {
+                    setStatus('not found')
+                }
+                if (error.name === 'TypeError') {
+                    setStatus('not connection')
+                }
+                // alert(error);
             })
     }
     let listFilm = data.map(movie =>
@@ -91,6 +99,16 @@ export default function AkanDihapus() {
         )
     }
 
+    function notFound() {
+        return (
+            <h1 className='text-center mt-8'>Movies Not Found</h1>
+        )
+    }
+    function notConnection() {
+        return (
+            <h1>Not Connection</h1>
+        )
+    }
     function showModal(kopi) {
         if (Show) {
             if (detileMovie) {
@@ -156,7 +174,6 @@ export default function AkanDihapus() {
                             <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
                         </div>
                     </div>
-
                 )
             }
             if (!detileMovie) {
@@ -190,8 +207,19 @@ export default function AkanDihapus() {
     }
 
     function kopi() {
-        if (status) {
+        console.log(status);
+        console.log(data);
+        if (status === true) {
             return Shimmer();
+        }
+
+        if (status === 'not found') {
+            console.log('ok');
+            return notFound()
+        }
+        if (status === 'not connection') {
+            console.log('ok');
+            return notConnection()
         }
 
         return listFilm;
@@ -199,7 +227,7 @@ export default function AkanDihapus() {
 
 
     return (
-        <div className='absolute w-[90vw] -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2 mt-4 mx-auto'>
+        <div className='absolute w-[90vw] -translate-x-1/2 left-1/2 -translate-y-1/2 xl:top-1/2 mt-8 mx-auto'>
             <div className='w-fit mx-auto flex gap-1 items-center'>
                 <input type="text" id='inputan' className=' rounded-lg text-xl p-[.35rem] bg-white text-black border-2 border-black' />
                 <button className='rounded-1 border' onClick={getData}>Get Data</button>
