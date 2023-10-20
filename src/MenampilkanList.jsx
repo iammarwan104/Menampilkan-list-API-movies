@@ -37,16 +37,17 @@ export default function AkanDihapus() {
     }
     let listFilm = data.map(movie =>
         <SwiperSlide key={movie.imdbID}>
-            <img src={movie.Poster} alt={movie.Title} />
+            <img src={movie.Poster} alt={movie.Title} className='w-full' />
             <h3 className='text-white font-semibold text-xl my-2'>{movie.Title}</h3>
             <button onClick={() => showModalDetile(movie.imdbID)} >Detile</button>
         </SwiperSlide>
     )
 
 
-    const [detileMovie, setDetileMovie] = useState([])
+    const [detileMovie, setDetileMovie] = useState(null)
     const [Show, setShow] = useState(false);
     function showModalDetile(id) {
+        setDetileMovie(null)
         fetch(`http://www.omdbapi.com/?i=${id}&apikey=aebedaef`)
             .then(Response => Response.json())
             .then(datas => setDetileMovie(datas))
@@ -62,17 +63,29 @@ export default function AkanDihapus() {
     function Shimmer() {
         return (
             <div>
-                <SwiperSlide>
-                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
+                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
+                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
                 </SwiperSlide>
-                <SwiperSlide>
-                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
+                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
+                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
                 </SwiperSlide>
-                <SwiperSlide>
-                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
+                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
+                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
                 </SwiperSlide>
-                <SwiperSlide>
-                    <ShimmerPostItem card title cta imageHeight={300} imageWidth={210} />
+                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
+                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
+                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
+                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
                 </SwiperSlide>
             </div>
         )
@@ -80,68 +93,96 @@ export default function AkanDihapus() {
 
     function showModal(kopi) {
         if (Show) {
-            return (
-                <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll">
-                    <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start">
-                        <div className=" box-border flex justify-end ">
-                            <img src={kopi.Poster} alt={kopi.Title} />
+            if (detileMovie) {
+                return (
+                    <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll">
+                        <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start">
+
+                            <div className=" box-border flex justify-end ">
+                                <img src={kopi.Poster} alt={kopi.Title} />
+                            </div>
+                            <div className="relative w-[90vw] md:w-1/2 ">
+                                <h2 className="text-white text-4xl font-bold mb-4">{kopi.Title}</h2>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Diterbitkan</td>
+                                            <td> : </td>
+                                            <td> {kopi.Year} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>IMDb</td>
+                                            <td> : </td>
+                                            <td> {kopi.imdbRating} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Genre</td>
+                                            <td> : </td>
+                                            <td> {kopi.Genre} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Durasi</td>
+                                            <td> : </td>
+                                            <td> {kopi.Runtime} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Negara</td>
+                                            <td> : </td>
+                                            <td> {kopi.Country} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sutradara</td>
+                                            <td> : </td>
+                                            <td> {kopi.Director} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Aktor</td>
+                                            <td> : </td>
+                                            <td> {kopi.Actors} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sutradara</td>
+                                            <td> : </td>
+                                            <td> {kopi.Director} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Plot</td>
+                                            <td> : </td>
+                                            <td> {kopi.Plot} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
                         </div>
-                        <div className="relative w-[90vw] md:w-1/2 ">
-                            <h2 className="text-white text-4xl font-bold mb-4">{kopi.Title}</h2>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>Diterbitkan</td>
-                                        <td> : </td>
-                                        <td> {kopi.Year} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>IMDb</td>
-                                        <td> : </td>
-                                        <td> {kopi.imdbRating} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Genre</td>
-                                        <td> : </td>
-                                        <td> {kopi.Genre} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Durasi</td>
-                                        <td> : </td>
-                                        <td> {kopi.Runtime} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Negara</td>
-                                        <td> : </td>
-                                        <td> {kopi.Country} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sutradara</td>
-                                        <td> : </td>
-                                        <td> {kopi.Director} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Aktor</td>
-                                        <td> : </td>
-                                        <td> {kopi.Actors} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sutradara</td>
-                                        <td> : </td>
-                                        <td> {kopi.Director} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Plot</td>
-                                        <td> : </td>
-                                        <td> {kopi.Plot} </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
                     </div>
-                </div>
-            )
+
+                )
+            }
+            if (!detileMovie) {
+                return (
+                    <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll" >
+                        <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start animate-pulse">
+
+                            <div className=" box-border flex justify-end bg-white w-[290px] h-[440px] rounded-lg">
+                            </div>
+                            <div className="relative w-[90vw] md:w-1/2">
+                                <div className="bg-white w-1/2 h-8 text-4xl font-bold mb-4 rounded-lg"></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
+                            </div>
+                            <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
+                        </div>
+                    </div>
+                )
+            }
         }
         if (!Show) {
             return ''
@@ -173,12 +214,12 @@ export default function AkanDihapus() {
                         spaceBetween: 20,
                     },
                     768: {
-                        slidesPerView: 2,
+                        slidesPerView: 3,
                         spaceBetween: 40,
                     },
                     1024: {
                         slidesPerView: 4,
-                        spaceBetween: 50,
+                        spaceBetween: 40,
                     },
                 }}
                 modules={[Navigation]}
