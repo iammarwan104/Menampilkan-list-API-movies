@@ -8,218 +8,135 @@ import { ShimmerPostItem } from "react-shimmer-effects";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import ShowShimmer from './components/Shimmers/ShowShimmer';
+import ShowModalShimmer from './components/Shimmers/ShowModalShimmer';
+import ModalMovie from './components/ResultModal/modalMovie';
+
 
 export default function AkanDihapus() {
-    const [data, setData] = useState([]);
-    const [status, setStatus] = useState(false)
 
+    // state ini dijadikan tempat penampungan data film yang telah diambil menggunakan method fetch
+    // dan nilai defaultnya harus array kosong agar method map tidak error
+    const [dataMovie, setDataMovie] = useState([]);
+
+
+    // fungsi state ini untuk mengaktifkan/nonaktifkan efek shimmer
+    // defaultnya shimmer nonaktif/false
+    // ada 4 nilai yang akan dimasukkan kedalam state ini yaitu : false, true, not found, not connection
+    // 
+    const [statusShimmer, setStatusShimmer] = useState(false)
+
+    const API_KEY = 'aebedaef';
 
     function getData() {
-        const inputan = document.getElementById('inputan');
-        setStatus(true)
-        fetch(`http://www.omdbapi.com/?s=${inputan.value}&apikey=aebedaef`)
+
+        const NAME_MOVIE = document.getElementById('inputan');
+        const URL_BASE_TO_GET_BY_NAME = `http://www.omdbapi.com/?s=${NAME_MOVIE.value}&apikey=${API_KEY}`;
+
+        // ketika data film dalam proses pengambilan
+        // aktifkan efek shimmer dengan kata keyword true
+        setStatusShimmer(true)
+
+
+        fetch(URL_BASE_TO_GET_BY_NAME)
             .then(response => {
+
+                // jika terdapat masalah pada url movie maka akan menampilan pesan dibawah
                 if (!response.ok) {
                     throw new Error('Ada yang salah pada link')
                 }
+
+                // jika proses lancar, promise akan dirubah menjadi data json
                 return response.json()
             })
             .then(datas => {
-                console.log(datas);
+
+                // jika nama film tidak ditemukan maka error akan ditangkap dan dilempar ke method catch
                 if (datas.Response === 'False') {
                     throw new Error(datas.Error)
                 };
-                setStatus(false)
-                return (setData(datas.Search))
+
+                // jika proses berjalan lancar, efek shimmer akan dihilangkan dengan keyword false
+                setStatusShimmer(false)
+
+                // kemudian memasukkan data film ke dalam variable data pada state diatas
+                return (setDataMovie(datas.Search))
             })
             .catch(error => {
-                console.log(error.name);
+                // jika nama error adalah Error maka rubah nilai statusShimmer menjadi not found
                 if (error.name === 'Error') {
-                    setStatus('not found')
+                    setStatusShimmer('not found')
                 }
+                // jika nama error adalah TypeError maka rubah nilai statusShimmer menjadi not connection
+
                 if (error.name === 'TypeError') {
-                    setStatus('not connection')
+                    setStatusShimmer('not connection')
                 }
-                // alert(error);
             })
     }
-    let listFilm = data.map(movie =>
+    let listFilm = dataMovie.map(movie =>
         <SwiperSlide key={movie.imdbID}>
             <img src={movie.Poster} alt={movie.Title} className='w-full' />
             <h3 className='text-white font-semibold text-xl my-2'>{movie.Title}</h3>
-            <button onClick={() => showModalDetile(movie.imdbID)} >Detile</button>
+            <button onClick={() => showModalDet(movie.imdbID)} >Detile</button>
         </SwiperSlide>
     )
 
 
-    const [detileMovie, setDetileMovie] = useState(null)
-    const [Show, setShow] = useState(false);
-    function showModalDetile(id) {
-        setDetileMovie(null)
-        fetch(`http://www.omdbapi.com/?i=${id}&apikey=aebedaef`)
-            .then(Response => Response.json())
-            .then(datas => setDetileMovie(datas))
-            .catch(err => console.log(err.name))
+    // ini variable untuk menampung detail movie, nilai defaut null/kosong
+    const [detailMovie, setDetailMovie] = useState(null)
+    const [StatusShowModal, setStatusShowModal] = useState(false);
 
-        setShow(true)
+
+    function showModalDet(id) {
+        setDetailMovie(null)
+        const ID_MOVIE = id;
+        const URL_BASE_TO_GET_BY_ID = `http://www.omdbapi.com/?i=${ID_MOVIE}&apikey=${API_KEY}`
+        fetch(URL_BASE_TO_GET_BY_ID)
+            .then(Response => Response.json())
+            .then(datas => setDetailMovie(datas))
+            .catch(err => console.log(err.name))
+        setStatusShowModal(true)
     }
 
     function closeModal() {
-        setShow(false)
+        setStatusShowModal(false)
     }
 
-    function Shimmer() {
-        return (
-            <div>
-                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
-                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
-                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
-                </SwiperSlide>
-                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
-                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
-                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
-                </SwiperSlide>
-                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
-                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
-                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
-                </SwiperSlide>
-                <SwiperSlide className='bg-white p-4 rounded-lg animate-pulse'>
-                    <div className='w-full h-[350px] bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-full h-5 bg-slate-200 rounded-lg mb-3'></div>
-                    <div className='w-3/4 h-5 bg-slate-200 rounded-lg mb-6'></div>
-                    <div className='w-24 h-8 bg-slate-200 rounded-lg'></div>
-                </SwiperSlide>
-            </div>
-        )
-    }
 
-    function notFound() {
+    function notFoundMovies() {
         return (
             <h1 className='text-center mt-8'>Movies Not Found</h1>
         )
     }
-    function notConnection() {
+    function notConnectionNetwork() {
         return (
             <h1>Not Connection</h1>
         )
     }
-    function showModal(kopi) {
-        if (Show) {
-            if (detileMovie) {
-                return (
-                    <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll">
-                        <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start">
-
-                            <div className=" box-border flex justify-end ">
-                                <img src={kopi.Poster} alt={kopi.Title} />
-                            </div>
-                            <div className="relative w-[90vw] md:w-1/2 ">
-                                <h2 className="text-white text-4xl font-bold mb-4">{kopi.Title}</h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>Diterbitkan</td>
-                                            <td> : </td>
-                                            <td> {kopi.Year} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>IMDb</td>
-                                            <td> : </td>
-                                            <td> {kopi.imdbRating} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Genre</td>
-                                            <td> : </td>
-                                            <td> {kopi.Genre} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Durasi</td>
-                                            <td> : </td>
-                                            <td> {kopi.Runtime} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Negara</td>
-                                            <td> : </td>
-                                            <td> {kopi.Country} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sutradara</td>
-                                            <td> : </td>
-                                            <td> {kopi.Director} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Aktor</td>
-                                            <td> : </td>
-                                            <td> {kopi.Actors} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sutradara</td>
-                                            <td> : </td>
-                                            <td> {kopi.Director} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Plot</td>
-                                            <td> : </td>
-                                            <td> {kopi.Plot} </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
-                        </div>
-                    </div>
-                )
+    function showModal(movie) {
+        if (StatusShowModal) {
+            if (detailMovie) {
+                return <ModalMovie movie={movie} btnClose={closeModal} />
             }
-            if (!detileMovie) {
-                return (
-                    <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll" >
-                        <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start animate-pulse">
-
-                            <div className=" box-border flex justify-end bg-white w-[290px] h-[440px] rounded-lg">
-                            </div>
-                            <div className="relative w-[90vw] md:w-1/2">
-                                <div className="bg-white w-1/2 h-8 text-4xl font-bold mb-4 rounded-lg"></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                                <div className='w-full h-5 bg-white rounded-md mb-3'></div>
-                            </div>
-                            <span onClick={closeModal} className="absolute right-4 top-2 font-bold text-3xl hover:cursor-pointer">&times;</span>
-                        </div>
-                    </div>
-                )
+            if (!detailMovie) {
+                return <ShowModalShimmer />
             }
         }
-        if (!Show) {
+        if (!StatusShowModal) {
             return ''
         }
     }
 
-    function kopi() {
-        console.log(status);
-        console.log(data);
-        if (status === true) {
-            return Shimmer();
+    function searchResult() {
+        if (statusShimmer === true) {
+            return <ShowShimmer />
         }
-
-        if (status === 'not found') {
-            console.log('ok');
-            return notFound()
+        if (statusShimmer === 'not found') {
+            return notFoundMovies()
         }
-        if (status === 'not connection') {
-            console.log('ok');
-            return notConnection()
+        if (statusShimmer === 'not connection') {
+            return notConnectionNetwork()
         }
 
         return listFilm;
@@ -252,10 +169,10 @@ export default function AkanDihapus() {
                 }}
                 modules={[Navigation]}
                 className="w-full  right-0 bottom-0 my-8">
-                {kopi()}
+                {searchResult()}
 
             </Swiper>
-            {showModal(detileMovie)}
+            {showModal(detailMovie)}
         </div>
     )
 }
