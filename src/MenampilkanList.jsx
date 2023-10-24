@@ -10,8 +10,7 @@ import ShowModalShimmer from './components/Shimmers/ShowModalShimmer';
 import ModalMovie from './components/ResultModal/modalMovie';
 
 
-
-export default function MenampilkanList() {
+export default function menampilkanList() {
     // state ini dijadikan tempat penampungan data film yang telah diambil menggunakan method fetch
     // dan nilai defaultnya harus array kosong agar method map tidak error
     const [dataMovie, setDataMovie] = useState([]);
@@ -22,7 +21,7 @@ export default function MenampilkanList() {
     const [statusShimmer, setStatusShimmer] = useState(false)
     const API_KEY = 'aebedaef';
     const BASE_URL = `http://www.omdbapi.com/`;
-    function GetData() {
+    function getData() {
         let getNameMovie = document.getElementById('inputan');
         let endPoinGetMovies = `${BASE_URL}?s=${getNameMovie.value}&apikey=${API_KEY}`;
         // ketika data film dalam proses pengambilan
@@ -68,7 +67,7 @@ export default function MenampilkanList() {
     // ini variable untuk menampung detail movie, nilai defaut null/kosong
     const [detailMovie, setDetailMovie] = useState(null)
     const [StatusShowModal, setStatusShowModal] = useState(false);
-    function ShowModalDetail(id) {
+    function showModalDetail(id) {
         setDetailMovie(null)
         const ID_MOVIE = id;
         let endPointGetMovieDetail = `${BASE_URL}?i=${ID_MOVIE}&apikey=${API_KEY}`
@@ -78,20 +77,20 @@ export default function MenampilkanList() {
             .catch(err => console.log(err.name))
         setStatusShowModal(true)
     }
-    function CloseModal() {
+    function closeModal() {
         setStatusShowModal(false)
     }
-    function NotFoundMovies() {
+    function notFoundMovies() {
         return (
             <h1 className='text-center mt-8'>Movies Not Found</h1>
         )
     }
-    function NotConnectionNetwork() {
+    function notConnectionNetwork() {
         return (
             <h1>Not Connection</h1>
         )
     }
-    function ShowModal(movie) {
+    function showModal(movie) {
         if (StatusShowModal) {
             if (detailMovie) {
                 return <ModalMovie movie={movie} btnClose={CloseModal} />
@@ -104,15 +103,15 @@ export default function MenampilkanList() {
             return ''
         }
     }
-    function SearchResult() {
+    function searchResult() {
         if (statusShimmer === true) {
             return <ShowShimmer />
         }
         if (statusShimmer === 'not found') {
-            return NotFoundMovies()
+            return notFoundMovies()
         }
         if (statusShimmer === 'not connection') {
-            return NotConnectionNetwork()
+            return notConnectionNetwork()
         }
         return listFilm;
     }
@@ -120,7 +119,7 @@ export default function MenampilkanList() {
         <div className='absolute w-[90vw] -translate-x-1/2 left-1/2 -translate-y-1/2 xl:top-1/2 mt-8 mx-auto'>
             <div className='w-fit mx-auto flex gap-1 items-center'>
                 <input type="text" id='inputan' className=' rounded-lg text-xl p-[.35rem] bg-white text-black border-2 border-black' />
-                <button className='rounded-1 border' onClick={GetData}>Get Data</button>
+                <button className='rounded-1 border' onClick={getData}>Get Data</button>
             </div>
             <Swiper
                 slidesPerView={1}
@@ -142,9 +141,9 @@ export default function MenampilkanList() {
                 }}
                 modules={[Navigation]}
                 className="w-full  right-0 bottom-0 my-8">
-                {SearchResult()}
+                {searchResult()}
             </Swiper>
-            {ShowModal(detailMovie)}
+            {showModal(detailMovie)}
         </div>
     )
 }
