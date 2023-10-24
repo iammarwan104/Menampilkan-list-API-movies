@@ -1,4 +1,4 @@
-export default function ShowModalShimmer() {
+export default function showModalShimmer() {
     return (
         <div className="fixed z-50 top-0 left-0 bg-black/80 flex items-center rounded-xl w-full h-full overflow-scroll" >
             <div className="w-full mx-auto flex flex-wrap justify-center gap-4 items-start animate-pulse">

@@ -5,7 +5,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-export default function ShowShimmer() {
+export default function showShimmer() {
     return (
         <Swiper
             slidesPerView={1}
