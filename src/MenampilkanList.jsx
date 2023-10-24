@@ -176,3 +176,7 @@ export default function AkanDihapus() {
         </div>
     )
 }
+
+
+// Naming Conventions for react js
+// https://dev.to/sathishskdev/part-1-naming-conventions-the-foundation-of-clean-code-51ng
